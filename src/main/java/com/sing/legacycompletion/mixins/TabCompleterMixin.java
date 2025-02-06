@@ -189,9 +189,8 @@ public abstract class TabCompleterMixin implements ICompletionList {
             final int top = bottom - height;
             return new Rectangle(left, top, boxWidth, height);
         }else{
-            final int bottom = drawY + 3;
-            final int top = bottom + height;
-            return new Rectangle(left, top, boxWidth, height);
+            final int bottom =drawY+3+textField.fontRenderer.FONT_HEIGHT+5;
+            return new Rectangle(left, bottom, boxWidth, height);
         }
     }
     @Override

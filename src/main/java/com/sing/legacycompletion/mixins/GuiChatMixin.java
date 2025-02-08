@@ -17,7 +17,8 @@ public abstract class GuiChatMixin extends GuiScreen {
     private TabCompleter tabCompleter;
     @Unique
     private boolean legacyCompletion$hasCompleted;
-
+    @Unique
+    private boolean legacyCompletion$isLastTab;
     @Shadow
     public void getSentHistory(int i) {
     }
@@ -40,6 +41,7 @@ public abstract class GuiChatMixin extends GuiScreen {
         this.tabCompleter.resetRequested();
         ICompletionList list = (ICompletionList) this.tabCompleter;
         if (!legacyCompletion$hasCompleted && list.legacyCompletion$hasCompletion()) legacyCompletion$hasCompleted = true;
+        if(keyCode!=15)legacyCompletion$isLastTab=false;
         switch (keyCode) {
             case 1:
                 mc.displayGuiScreen(null);
@@ -47,7 +49,8 @@ public abstract class GuiChatMixin extends GuiScreen {
             case 15:
                 if(!legacyCompletion$hasCompleted) tabCompleter.resetDidComplete();
                 else {
-                    if(tabCompleter.didComplete)list.legacyCompletion$moveBy(1);
+                    if(legacyCompletion$isLastTab)list.legacyCompletion$moveBy(1);
+                    else legacyCompletion$isLastTab=true;
                     tabCompleter.complete();
                 }
                 break;

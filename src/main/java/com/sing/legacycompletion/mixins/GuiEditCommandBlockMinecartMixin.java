@@ -35,7 +35,7 @@ public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen impleme
     @Shadow
     private GuiButton doneButton;
     @Unique
-    private boolean legacyCompletion$hasCompleted;
+    private boolean legacyCompletion$isLastTab;
 
     @Inject(method = "initGui", at = @At("RETURN"))
     private void initialize(CallbackInfo ci) {
@@ -63,18 +63,15 @@ public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen impleme
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         this.tabCompleter.resetRequested();
         ICompletionList list = (ICompletionList) this.tabCompleter;
-        if (!legacyCompletion$hasCompleted && list.legacyCompletion$hasCompletion())
-            legacyCompletion$hasCompleted = true;
+        tabCompleter.resetDidComplete();
+        if(keyCode!=15)legacyCompletion$isLastTab=false;
         switch (keyCode) {
             case 1:
                 this.actionPerformed(this.cancelButton);
                 break;
             case 15:
-                if (!legacyCompletion$hasCompleted) tabCompleter.resetDidComplete();
-                else {
-                    if (tabCompleter.didComplete) list.legacyCompletion$moveBy(1);
-                    tabCompleter.complete();
-                }
+                if (legacyCompletion$isLastTab) list.legacyCompletion$moveBy(1);
+                else legacyCompletion$isLastTab=true;
                 break;
             case 200:
                 list.legacyCompletion$moveBy(-1);

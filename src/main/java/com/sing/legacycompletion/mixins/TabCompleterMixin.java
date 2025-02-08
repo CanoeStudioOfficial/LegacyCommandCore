@@ -70,8 +70,10 @@ public abstract class TabCompleterMixin implements ICompletionList {
     @Overwrite
     public void setCompletions(String... serverCompletion) {
         if (!this.requestedCompletions) return;
-        this.completions=new ArrayList<>(this.legacyCompletion$clientCompletion);
-        this.completions.addAll(Arrays.asList(serverCompletion));
+        if(this.legacyCompletion$clientCompletion!=null) {
+            this.completions = new ArrayList<>(this.legacyCompletion$clientCompletion);
+            this.completions.addAll(Arrays.asList(serverCompletion));
+        }else this.completions=Arrays.asList(serverCompletion);
     }
 
     @Override
@@ -213,13 +215,16 @@ public abstract class TabCompleterMixin implements ICompletionList {
                 final boolean useSlash = prefix.startsWith("/");
                 this.legacyCompletion$clientCompletion=new ArrayList<>();
                 for (Map.Entry<String, ICommand> command : commands.entrySet()) {
-                    if (command.getValue().checkPermission(server, mc.player)
+                    if (command.getValue().getName().startsWith(useSlash?prefix.substring(1):prefix)&&
+                            command.getValue().checkPermission(server, mc.player)
                             && (!(command.getValue() instanceof IClientCommand) ||
                             useSlash &&
                                     !((IClientCommand) command.getValue()).allowUsageWithoutPrefix(mc.player, prefix))) {
                         this.legacyCompletion$clientCompletion.add(useSlash ? '/' + command.getKey() : command.getKey());
                     }
                 }
+                //TODO not to simply sort it
+                this.legacyCompletion$clientCompletion.sort(String::compareTo);
             } else if(!prefix.trim().isEmpty()){
                 String[] params = prefix.split(" ");
                 final String commandName = params[0];

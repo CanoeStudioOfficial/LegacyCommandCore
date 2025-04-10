@@ -71,8 +71,10 @@ public abstract class TabCompleterMixin implements ICompletionList {
     public void setCompletions(String... serverCompletion) {
         if (!this.requestedCompletions) return;
         if(this.legacyCompletion$clientCompletion!=null) {
-            this.completions = new ArrayList<>(this.legacyCompletion$clientCompletion);
+            this.completions =legacyCompletion$clientCompletion;
             this.completions.addAll(Arrays.asList(serverCompletion));
+            completions.sort(null);
+            legacyCompletion$clientCompletion=null;
         }else this.completions=Arrays.asList(serverCompletion);
     }
 
@@ -106,6 +108,8 @@ public abstract class TabCompleterMixin implements ICompletionList {
         final int renderStart = MathHelper.clamp(legacyCompletion$scrollOffset, 0, Math.max(completions.size() - VISIBLE_ROWS, 0));
         final int renderEnd = renderStart + Math.min(VISIBLE_ROWS, completions.size());
         final int completionStart = textField.getCursorPosition() - lastArgStart;
+        // for some reason it will happen
+        if(completionStart<0)return;
         if (completionStart < item.length() && item.startsWith(textField.getText().substring(lastArgStart, textField.getCursorPosition())))
             fontRenderer.drawString(item.substring(completionStart), drawX + fontRenderer.getStringWidth(text), drawY, 0xFF777777);
         final int itemHeight = fontRenderer.FONT_HEIGHT + 2;
@@ -226,11 +230,11 @@ public abstract class TabCompleterMixin implements ICompletionList {
                 //TODO not to simply sort it
                 this.legacyCompletion$clientCompletion.sort(String::compareTo);
             } else if(!prefix.trim().isEmpty()){
-                String[] params = prefix.split(" ");
+                String[] params = prefix.split(" ",-1);
                 final String commandName = params[0];
-                final ICommand command = commands.get(commandName);
+                final ICommand command = commands.get(commandName.substring(1));
                 if (command != null) {
-                    this.completions = new ArrayList<>(command.getTabCompletions(server, mc.player,Utils.dropFirst(params), mc.player.getPosition()));
+                    legacyCompletion$clientCompletion = new ArrayList<>(command.getTabCompletions(server, mc.player,Utils.dropFirst(params), mc.player.getPosition()));
                 }
             }
         }

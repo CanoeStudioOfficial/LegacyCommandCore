@@ -76,7 +76,6 @@ public abstract class GuiChatMixin extends GuiScreen {
                 if (!s.isEmpty()) {
                     this.sendChatMessage(s);
                 }
-                //TODO make it configurable
                 this.mc.displayGuiScreen(null);
                 break;
             }

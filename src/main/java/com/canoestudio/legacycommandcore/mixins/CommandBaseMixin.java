@@ -1,4 +1,4 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterables;

@@ -1,4 +1,4 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

@@ -1,6 +1,7 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
-import com.sing.legacycompletion.legacy_completion.Tags;
+
+import com.canoestudio.legacycommandcore.legacy_command_core.Tags;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class MixinInit implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
-        return Collections.singletonList("mixins.legacy_completion.json");
+        return Collections.singletonList("mixins.legacy_command_core.json");
     }
     @Override
     public String[] getASMTransformerClass() {

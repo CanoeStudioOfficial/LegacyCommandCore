@@ -1,4 +1,4 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
 import net.minecraft.client.gui.*;
 import net.minecraft.util.TabCompleter;

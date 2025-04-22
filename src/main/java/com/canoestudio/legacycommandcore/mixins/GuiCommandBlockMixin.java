@@ -1,10 +1,10 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
-import com.sing.legacycompletion.ICompletionList;
+import com.canoestudio.legacycommandcore.ICompletionList;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiEditCommandBlockMinecart;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ITabCompleter;
 import net.minecraft.util.TabCompleter;
@@ -19,21 +19,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
 
-
-/* Mojang's class duplication magic here.
-* This mixin follows their "pattern" (if you can call it that).
-* Anyway,it works well,right?
-*/
-@Mixin(GuiEditCommandBlockMinecart.class)
-public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen implements ITabCompleter {
+@Mixin(GuiCommandBlock.class)
+public abstract class GuiCommandBlockMixin extends GuiScreen implements ITabCompleter {
     @Shadow
     private TabCompleter tabCompleter;
     @Shadow
-    private GuiTextField commandField;
+    private GuiTextField commandTextField;
     @Shadow
-    private GuiButton cancelButton;
+    private GuiTextField previousOutputTextField;
     @Shadow
-    private GuiButton doneButton;
+    private GuiButton cancelBtn;
+    @Shadow
+    private GuiButton doneBtn;
     @Unique
     private boolean legacyCompletion$isLastTab;
 
@@ -63,15 +60,15 @@ public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen impleme
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         this.tabCompleter.resetRequested();
         ICompletionList list = (ICompletionList) this.tabCompleter;
-        tabCompleter.resetDidComplete();
         if(keyCode!=15)legacyCompletion$isLastTab=false;
         switch (keyCode) {
             case 1:
-                this.actionPerformed(this.cancelButton);
+                this.actionPerformed(this.cancelBtn);
                 break;
             case 15:
                 if (legacyCompletion$isLastTab) list.legacyCompletion$moveBy(1);
                 else legacyCompletion$isLastTab=true;
+                tabCompleter.complete();
                 break;
             case 200:
                 list.legacyCompletion$moveBy(-1);
@@ -81,10 +78,10 @@ public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen impleme
                 break;
             case 28:
             case 156:
-                this.actionPerformed(this.doneButton);
+                this.actionPerformed(this.doneBtn);
                 break;
             default: {
-                this.commandField.textboxKeyTyped(typedChar, keyCode);
+                this.commandTextField.textboxKeyTyped(typedChar, keyCode);
                 this.tabCompleter.resetDidComplete();
                 break;
             }
@@ -100,7 +97,12 @@ public abstract class GuiEditCommandBlockMinecartMixin extends GuiScreen impleme
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRenderer, I18n.format("advMode.setCommand"), this.width / 2, 20, 16777215);
         this.drawString(this.fontRenderer, I18n.format("advMode.command"), this.width / 2 - 150, 40, 10526880);
-        this.commandField.drawTextBox();
+        this.commandTextField.drawTextBox();
+        if (!this.previousOutputTextField.getText().isEmpty()) {
+            int i = 80 * this.fontRenderer.FONT_HEIGHT + 1;
+            this.drawString(this.fontRenderer, I18n.format("advMode.previousOutput"), this.width / 2 - 150, i + 4, 10526880);
+            this.previousOutputTextField.drawTextBox();
+        }
         ((ICompletionList) this.tabCompleter).legacyCompletion$render();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

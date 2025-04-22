@@ -1,6 +1,6 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
-import com.sing.legacycompletion.ICompletionList;
+import com.canoestudio.legacycommandcore.ICompletionList;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.TabCompleter;
 import org.lwjgl.input.Mouse;

@@ -1,4 +1,4 @@
-package com.sing.legacycompletion.utils;
+package com.canoestudio.legacycommandcore.utils;
 
 import java.util.Arrays;
 

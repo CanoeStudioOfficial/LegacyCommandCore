@@ -1,4 +1,4 @@
-package com.sing.legacycompletion;
+package com.canoestudio.legacycommandcore;
 
 public interface ICompletionList {
     void legacyCompletion$render();

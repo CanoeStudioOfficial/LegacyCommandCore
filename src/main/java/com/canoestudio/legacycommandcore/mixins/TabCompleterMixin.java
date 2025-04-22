@@ -1,7 +1,7 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
-import com.sing.legacycompletion.ICompletionList;
-import com.sing.legacycompletion.utils.Utils;
+import com.canoestudio.legacycommandcore.ICompletionList;
+import com.canoestudio.legacycommandcore.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.command.ICommand;

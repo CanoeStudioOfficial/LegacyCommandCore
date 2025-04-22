@@ -1,4 +1,4 @@
-package com.sing.legacycompletion.mixins;
+package com.canoestudio.legacycommandcore.mixins;
 
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayerMP;

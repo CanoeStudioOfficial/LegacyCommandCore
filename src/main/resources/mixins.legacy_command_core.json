@@ -1,5 +1,5 @@
 {
-  "package": "com.sing.legacycompletion.mixins",
+  "package": "com.canoestudio.legacycommandcore.mixins",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
